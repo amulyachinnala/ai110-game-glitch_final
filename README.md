@@ -29,9 +29,14 @@ It wrote the code, ran away, and now the game is unplayable.
 - [ ] Detail which bugs you found.
 - [ ] Explain what fixes you applied.
 
+The purpose of the game is to try to guess the secret number in as few tries as possible and before attempts run out. 
+Comments were added to app.py to the lines that were fixed to describe the change
+
 ## 📸 Demo
 
 - [ ] [Insert a screenshot of your fixed, winning game here]
+
+Screenshot is titled winning_screen.png
 
 ## 🚀 Stretch Features
 
