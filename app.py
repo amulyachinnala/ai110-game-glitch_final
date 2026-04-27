@@ -1,5 +1,10 @@
+import logging
 import random
 import streamlit as st
+from ai_agent import GuessingAgent # Importing our new Agent
+
+# --- LOGGING & GUARDRAILS ---
+logging.basicConfig(filename='game_debug.log', level=logging.INFO)
 
 def get_range_for_difficulty(difficulty: str):
     if difficulty == "Easy":
@@ -131,6 +136,9 @@ if submit:
 
     ok, guess_int, err = parse_guess(raw_guess)
 
+    # Logging Guardrail
+    logging.info(f"Attempt: {st.session_state.attempts} | Input: {raw_guess} | Valid: {ok}")
+
     if not ok:
         st.session_state.history.append(raw_guess)
         st.error(err)
@@ -138,6 +146,19 @@ if submit:
         st.session_state.history.append(guess_int)
 
         outcome, message = check_guess(guess_int, st.session_state.secret)
+
+        # --- NEW AGENTIC FEATURE ---
+        if show_hint:
+            agent = GuessingAgent(
+                st.session_state.secret, 
+                st.session_state.history, 
+                (low, high)
+            )
+            analysis = agent.analyze_strategy()
+            confidence = agent.get_confidence_score()
+            
+            st.warning(f"**AI Agent Hint:** {analysis}")
+            st.caption(f"Agent Confidence: {confidence*100}%")
 
         if show_hint:
             st.warning(message)
